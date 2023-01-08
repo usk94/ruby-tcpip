@@ -1,3 +1,6 @@
+require "./ethernet"
+require "./utils"
+
 class Arp
   attr_reader :hardware_type, :protocol_type, :hardware_size, :protocol_size, :opcode, :sender_mac_addr,
               :sender_ip_addr, :target_mac_addr, :target_ip_addr
@@ -14,7 +17,8 @@ class Arp
   end
 
   def send
-
+    utils = Utils.new
+    Ethernet.new("ARP", utils.get_local_mac_and_ip_addr.mac_addr, "ff:ff:ff:ff:ff:ff")
   end
 end
 
