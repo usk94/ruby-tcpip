@@ -12,6 +12,10 @@ class Arp
     @target_mac_addr = 0x000000000000
     @target_ip_addr = target_ip_addr
   end
+
+  def send
+
+  end
 end
 
 a = Arp.new(1, 1, 1)
