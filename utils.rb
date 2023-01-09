@@ -1,13 +1,23 @@
 require 'socket'
 
-class Utils
-  def get_local_mac_and_ip_addr
-    addr = Socket.getifaddrs
-                 .select { |ifaddr| ifaddr.name == "en0" && !ifaddr.addr.ipv6? }
-                 .map {|ifaddr| ifaddr.addr.inspect_sockaddr }
-    {mac_addr: addr[0].slice(9..-2), ip_addr: addr[1]}
+IF_NAME = "en0"
+
+module Utils
+  def get_packed_local_mac_addr
+    mac_addr = Socket.getifaddrs
+                .select { |ifaddr| ifaddr.name == IF_NAME && !ifaddr.addr.ipv4? &&!ifaddr.addr.ipv6? }
+                .first
+                .addr
+                .to_sockaddr
+    mac_addr[-6..-1]
+  end
+
+  def get_packed_local_ip_addr
+    ip_addr = Socket.getifaddrs
+                .select { |ifaddr| ifaddr.name == "en0" && ifaddr.addr.ipv4? }
+                .first
+                .addr
+                .ip_address
+    ip_addr.split(".").map { |s| [s.to_i].pack("C") }.join
   end
 end
-
-a = Utils.new
-p a.get_local_mac_and_ip_addr
