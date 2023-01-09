@@ -6,4 +6,8 @@ class Ethernet
     @src_mac_addr = src_mac_addr
     @dst_mac_addr = dst_mac_addr
   end
+
+  def header
+    @type + @src_mac_addr + @dst_mac_addr
+  end
 end
